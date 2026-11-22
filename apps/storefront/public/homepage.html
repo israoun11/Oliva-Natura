@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>OLIVA NATURA — Tunisian Olive Oil</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F5F0E6;--fg:#293B30;--acc:#B77D54;--mut:#56664A;--sand:#D4C5A5;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1d2a22;--fg:#F5F0E6;--acc:#d49a72;--mut:#A8B59A;--sand:#D4C5A5;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#1d2a22;--fg:#F5F0E6;--acc:#d49a72;--mut:#A8B59A;--sand:#D4C5A5}
+*{margin:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--fg);font-family:Jost,system-ui,sans-serif;overscroll-behavior:none}
+header{position:fixed;inset:0 0 auto;display:flex;justify-content:space-between;align-items:center;padding:calc(18px + env(safe-area-inset-top,0px)) 28px 0;z-index:5;font-size:12px;letter-spacing:.18em;text-transform:uppercase}
+header button{all:unset;cursor:pointer;padding:8px 14px;border:1px solid var(--fg);border-radius:99px}
+header button:focus-visible{outline:2px solid var(--acc)}
+.logo{position:absolute;left:50%;transform:translateX(-50%);font-family:'Cormorant Garamond',Georgia,serif;font-size:22px;letter-spacing:.32em;text-align:center;line-height:1}
+.logo small{display:block;font:300 9px Jost;letter-spacing:.4em;margin-top:5px;color:var(--acc)}
+#ring{position:fixed;left:50%;top:56%;width:min(130vmin,1100px);aspect-ratio:1;transform:translate(-50%,-50%);z-index:0;opacity:.9;animation:spin 90s linear infinite;pointer-events:none}
+@keyframes spin{to{transform:translate(-50%,-50%) rotate(360deg)}}
+#ring text{font:500 54px 'Cormorant Garamond',serif;letter-spacing:.2em;fill:var(--acc);opacity:.85}
+canvas{position:fixed;inset:0;z-index:1;width:100%;height:100%}
+.title{position:fixed;top:17vh;left:0;right:0;text-align:center;z-index:2;pointer-events:none;padding:0 16px}
+.title h1{font:400 clamp(40px,8.5vw,120px)/.95 'Cormorant Garamond',Georgia,serif;text-transform:uppercase;color:var(--acc);letter-spacing:.02em}
+.cap{position:fixed;bottom:16vh;z-index:2;font:400 clamp(18px,2.4vw,30px)/1.15 'Cormorant Garamond',serif;pointer-events:none;max-width:30vw}
+#capL{left:28px}#capR{right:28px;text-align:right}
+.hint{position:fixed;bottom:calc(22px + env(safe-area-inset-bottom,0px));left:0;right:0;text-align:center;font-size:11px;letter-spacing:.3em;text-transform:uppercase;z-index:2;display:flex;flex-direction:column;align-items:center;gap:10px}
+.dots{display:flex;gap:8px}.dots i{width:22px;height:2px;background:var(--fg);opacity:.25;transition:.4s}.dots i.on{opacity:1;background:var(--acc);width:36px}
+#pill{position:fixed;z-index:4;pointer-events:none;padding:8px 14px;background:var(--bg);color:var(--fg);border-radius:99px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;box-shadow:0 8px 24px #0003;opacity:0;transform:translate(14px,-50%);transition:opacity .25s;white-space:nowrap}
+#pill::before{content:"◆";color:var(--acc);margin-right:8px;font-size:8px}
+.menu{position:fixed;inset:0;background:var(--fg);color:var(--bg);z-index:10;display:flex;flex-direction:column;justify-content:center;padding:0 8vw;clip-path:circle(0 at calc(100% - 60px) 40px);visibility:hidden}
+.menu a{font:400 clamp(34px,6vw,76px)/1.15 'Cormorant Garamond',serif;color:inherit;text-decoration:none;display:block;overflow:hidden}
+.menu a span{display:inline-block}
+.menu a:hover{color:var(--sand);font-style:italic}
+.menu button{all:unset;position:absolute;top:22px;right:28px;cursor:pointer;font-size:12px;letter-spacing:.18em;text-transform:uppercase}
+#cta{position:fixed;right:28px;bottom:calc(22px + env(safe-area-inset-bottom,0px));z-index:3;background:var(--fg);color:var(--bg);padding:10px 20px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;text-decoration:none}[dir=rtl] #cta{right:auto;left:28px}
+.note{position:fixed;left:28px;bottom:calc(22px + env(safe-area-inset-bottom,0px));font-size:10px;opacity:.55;z-index:2;max-width:26vw}
+@media(max-width:700px){.cap{display:none}.note{display:none}header .lang{display:none}}
+@media(prefers-reduced-motion:reduce){#ring{animation:none}}
+</style></head><body>
+<header><span id="lang" style="font-size:11px;letter-spacing:.2em"><a href="/products" target="_top" style="color:inherit;text-decoration:none">SHOP</a></span>
+<div class="logo">OLIVA NATURA<small>TUNISIA</small></div><button id="open" aria-label="Open menu">Menu</button></header>
+<svg id="ring" viewBox="0 0 1000 1000" aria-hidden="true"><defs><path id="c" d="M500,500 m-420,0 a420,420 0 1,1 840,0 a420,420 0 1,1 -840,0"/></defs>
+<text><textPath href="#c">FROM THE TUNISIAN GROVES · WE GROW · WE PRESS · WE SHARE · FROM THE TUNISIAN GROVES · WE GROW · WE PRESS · WE SHARE ·</textPath></text></svg>
+<canvas id="gl" aria-label="Interactive 3D olive oil bottles"></canvas>
+<div class="title"><h1 id="name"></h1></div>
+<div class="cap" id="capL"></div><div class="cap" id="capR"></div>
+<div id="pill">Discover the product</div>
+<div class="hint"><span>Scroll to discover</span><div class="dots" id="dots"></div></div>
+<a id="cta" hidden></a><div class="note">Provisional product concepts. Names, volumes and claims are editable placeholders pending verified business information.</div>
+<nav class="menu" id="menu" aria-label="Main"><button id="close">Close</button>
+<a href="/products" target="_top"><span>Collections</span></a><a href="/our-story" target="_top"><span>Our Story</span></a><a href="/from-our-land" target="_top"><span>From Our Land</span></a><a href="/contact" target="_top"><span>Contact</span></a></nav>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script>
+const LG=((document.cookie.match(/(?:^|; )lang=(\w+)/)||[])[1])||'en';
+const TX={en:{menu:'Menu',close:'Close',scroll:'Scroll to discover',pill:'Discover the product',note:'Provisional product concepts. Names, volumes and claims are editable in the admin.',ring:'FROM THE TUNISIAN GROVES · WE GROW · WE PRESS · WE SHARE · ',nav:['Collections','Our Story','From Our Land','Contact'],made:'Made in\nTunisia',sub:'Tunisian\nolive oil'},
+fr:{menu:'Menu',close:'Fermer',scroll:'Faites défiler',pill:'Découvrir le produit',note:'Concepts de produits provisoires. Noms, volumes et mentions modifiables dans l\'administration.',ring:'DES OLIVERAIES TUNISIENNES · NOUS CULTIVONS · NOUS PRESSONS · NOUS PARTAGEONS · ',nav:['Collections','Notre Histoire','De Notre Terre','Contact'],made:'Fabriqué en\nTunisie',sub:'Huile d\'olive\ntunisienne'},
+ar:{menu:'القائمة',close:'إغلاق',scroll:'مرر للاكتشاف',pill:'اكتشف المنتج',note:'مفاهيم منتجات مؤقتة. الأسماء والأحجام قابلة للتعديل من لوحة الإدارة.',ring:'من بساتين تونس · نزرع · نعصر · نشارك · ',nav:['المجموعات','قصتنا','من أرضنا','اتصل بنا'],made:'صُنع في\nتونس',sub:'زيت زيتون\nتونسي'}}[LG]||null;
+const T=TX||{made:'Made in\nTunisia',sub:'Tunisian\nolive oil'};
+let P=[
+{slug:"original-500",n:"Original",l:T.sub,r:T.made,ml:"500 ml",g:0x23382b,s:1,lab:"EXTRA VIRGIN"},
+{slug:"early-harvest-250",n:"Early Harvest",l:T.sub,r:T.made,ml:"250 ml",g:0x2f4a35,s:.78,lab:"EARLY HARVEST"},
+{slug:"premium-500",n:"Premium Selection",l:T.sub,r:T.made,ml:"500 ml",g:0x1b2c22,s:1.02,lab:"PREMIUM"},
+{slug:"family-1l",n:"Family Selection",l:T.sub,r:T.made,ml:"1 L",g:0x2a4030,s:1.2,lab:"FAMILY"}];
+const $=id=>document.getElementById(id),reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+const R=new THREE.WebGLRenderer({canvas:$('gl'),antialias:true,alpha:true});
+R.setPixelRatio(Math.min(devicePixelRatio,innerWidth<700?1.5:2));R.outputEncoding=THREE.sRGBEncoding;
+const S=new THREE.Scene(),C=new THREE.PerspectiveCamera(32,1,.1,100);C.position.set(0,0,18);
+S.add(new THREE.HemisphereLight(0xfff3df,0x56664a,.9));
+const k=new THREE.DirectionalLight(0xfff0d8,1.6);k.position.set(5,8,9);S.add(k);
+const rim=new THREE.DirectionalLight(0xa8b59a,1.2);rim.position.set(-8,3,-5);S.add(rim);
+const fill=new THREE.PointLight(0xffffff,.8,40);fill.position.set(0,2,10);S.add(fill);
+function labelTex(t,ml){const c=document.createElement('canvas');c.width=512;c.height=420;const x=c.getContext('2d');
+x.fillStyle='#F5F0E6';x.fillRect(0,0,512,420);
+for(let i=0;i<2500;i++){x.fillStyle=`rgba(120,100,60,${Math.random()*.05})`;x.fillRect(Math.random()*512,Math.random()*420,2,1)}
+x.fillStyle='#293B30';x.textAlign='center';
+x.font='500 52px "Cormorant Garamond",Georgia,serif';x.fillText('OLIVA',256,92);x.fillText('NATURA',256,146);
+// olive branch
+x.strokeStyle='#56664A';x.lineWidth=3;x.beginPath();x.moveTo(176,200);x.quadraticCurveTo(256,170,336,200);x.stroke();
+x.fillStyle='#56664A';for(let i=0;i<6;i++){[-1,1].forEach(s=>{x.save();x.translate(206+i*20,190+(i<3?i:5-i)*-1);x.rotate(s*.7);x.beginPath();x.ellipse(0,s*9,13,4,0,0,7);x.fill();x.restore()})}
+x.fillStyle='#B77D54';x.beginPath();x.arc(346,206,6,0,7);x.fill();
+x.fillStyle='#293B30';x.font='400 22px Jost,sans-serif';x.fillText(t.split('').join(' '),256,270);
+x.font='300 20px Jost,sans-serif';x.fillText('OLIVE OIL  ·  '+ml.toUpperCase(),256,322);
+x.fillStyle='#B77D54';x.fillRect(206,356,100,2);x.fillStyle='#56664A';x.font='300 15px Jost';x.fillText('TUNISIA',256,392);
+const T=new THREE.CanvasTexture(c);T.encoding=THREE.sRGBEncoding;T.anisotropy=8;return T}
+const prof=[[0,0],[.88,0],[1,.12],[1,2.3],[.93,2.75],[.5,3.25],[.42,3.5],[.42,4],[.5,4.06],[.5,4.25],[0,4.25]].map(p=>new THREE.Vector2(p[0],p[1]));
+const sh=(()=>{const c=document.createElement('canvas');c.width=c.height=128;const x=c.getContext('2d'),g=x.createRadialGradient(64,64,0,64,64,64);g.addColorStop(0,'rgba(0,0,0,.45)');g.addColorStop(1,'rgba(0,0,0,0)');x.fillStyle=g;x.fillRect(0,0,128,128);return new THREE.CanvasTexture(c)})();
+function makeBottle(p){const grp=new THREE.Group(),b=new THREE.Group();
+const glass=new THREE.Mesh(new THREE.LatheGeometry(prof,64),new THREE.MeshPhysicalMaterial({color:p.g,roughness:.28,metalness:.05,clearcoat:1,clearcoatRoughness:.08,reflectivity:.8}));
+const lab=new THREE.Mesh(new THREE.CylinderGeometry(1.012,1.012,1.5,48,1,true,-1.15,2.3),new THREE.MeshStandardMaterial({map:labelTex(p.lab,p.ml),roughness:.9,side:THREE.DoubleSide}));lab.position.y=1.45;
+const cap=new THREE.Mesh(new THREE.CylinderGeometry(.5,.5,.5,40),new THREE.MeshStandardMaterial({color:0xc9a77a,roughness:.7}));cap.position.y=4.5;
+const neck=new THREE.Mesh(new THREE.TorusGeometry(.46,.04,12,40),new THREE.MeshStandardMaterial({color:0x56664a,roughness:.5}));neck.rotation.x=Math.PI/2;neck.position.y=4.22;
+b.add(glass,lab,cap,neck);b.position.y=-2.4;grp.add(b);
+const s=new THREE.Mesh(new THREE.PlaneGeometry(4,1.6),new THREE.MeshBasicMaterial({map:sh,transparent:true,depthWrite:false}));s.rotation.x=-Math.PI/2.4;s.position.y=-2.55;s.position.z=.2;grp.add(s);
+grp.userData={b,base:p.s,spin:0,hover:false};S.add(grp);return grp}
+let B=P.map(makeBottle);
+let cur=0,lock=false,hov=false,mx=0,my=0;
+const ray=new THREE.Raycaster(),mv=new THREE.Vector2();
+function size(){const w=innerWidth,h=innerHeight;R.setSize(w,h,false);C.aspect=w/h;C.position.z=w/h<.8?26:18;C.updateProjectionMatrix()}
+addEventListener('resize',()=>{size();place(true)});size();
+const sp=()=>innerWidth<700?3.4:5.2;
+function place(instant){B.forEach((g,i)=>{const o=i-cur,a=Math.abs(o),d=g.userData;
+const t={x:o*sp(),y:o===0?-.2:-.2+a*.5,sc:d.base*(o===0?1:.72)*(a>1?.4:1),rz:-o*.2};
+const tw=(instant||reduce)?0:1.1;
+gsap.to(g.position,{x:t.x,y:t.y,duration:tw,ease:'power3.inOut'});
+gsap.to(g.scale,{x:t.sc,y:t.sc,z:t.sc,duration:tw,ease:'power3.inOut'});
+gsap.to(g.rotation,{z:t.rz,duration:tw,ease:'power3.inOut'});
+if(o===0&&!instant&&!reduce){ // entrance: grow while rotating
+ g.scale.set(t.sc*.55,t.sc*.55,t.sc*.55);gsap.to(g.scale,{x:t.sc,y:t.sc,z:t.sc,duration:1.4,ease:'expo.out',overwrite:true});
+ gsap.fromTo(d.b.rotation,{y:-Math.PI*1.6},{y:0,duration:1.5,ease:'power3.out',overwrite:true})}
+gsap.to(g,{visible:a<=2,duration:0})})}
+function text(){const p=P[cur];
+gsap.fromTo('#name',{yPercent:30,opacity:0},{yPercent:0,opacity:1,duration:.9,ease:'power3.out'});$('name').textContent=p.n;
+$('capL').innerHTML=p.l.replace('\n','<br>');$('capR').innerHTML=p.r.replace('\n','<br>');
+[...$('dots').children].forEach((d,i)=>d.classList.toggle('on',i===cur))}
+P.forEach(()=>$('dots').appendChild(document.createElement('i')));
+function go(d){const n=cur+d;if(lock||n<0||n>=P.length)return;lock=true;cur=n;text();place();setTimeout(()=>lock=false,1100)}
+addEventListener('wheel',e=>{e.preventDefault();if(Math.abs(e.deltaY)>8)go(e.deltaY>0?1:-1)},{passive:false});
+let ty=0;addEventListener('touchstart',e=>ty=e.touches[0].clientY,{passive:true});
+addEventListener('touchend',e=>{const d=ty-e.changedTouches[0].clientY;if(Math.abs(d)>40)go(d>0?1:-1)});
+addEventListener('keydown',e=>{if(['ArrowDown','PageDown'].includes(e.key))go(1);if(['ArrowUp','PageUp'].includes(e.key))go(-1)});
+addEventListener('pointermove',e=>{mv.set(e.clientX/innerWidth*2-1,-(e.clientY/innerHeight)*2+1);
+ray.setFromCamera(mv,C);const hit=ray.intersectObject(B[cur],true).length>0;hov=hit;
+$('pill').style.opacity=hit?1:0;$('pill').style.left=e.clientX+'px';$('pill').style.top=e.clientY+'px';document.body.style.cursor=hit?'pointer':'';
+mx=mv.x;my=mv.y});
+addEventListener('click',e=>{if(hov&&!e.target.closest('header,.menu'))top.location.href=P[cur].live?'/products/'+P[cur].slug:'/products'});
+const clock=new THREE.Clock();
+(function loop(){requestAnimationFrame(loop);const dt=clock.getDelta();
+B.forEach((g,i)=>{const d=g.userData;if(i===cur&&hov&&!reduce&&!gsap.isTweening(d.b.rotation))d.b.rotation.y+=dt*1.6;
+else if(i===cur&&!hov&&!gsap.isTweening(d.b.rotation)){d.b.rotation.y+=(Math.round(d.b.rotation.y/(2*Math.PI))*2*Math.PI-d.b.rotation.y)*Math.min(1,dt*3)}
+if(i===cur)g.rotation.x=my*.04;
+if(i!==cur&&!gsap.isTweening(d.b.rotation))d.b.rotation.y=Math.sin(clock.elapsedTime*.5+i)*.25});
+R.render(S,C)})();
+// menu
+const m=$('menu'),tl=gsap.timeline({paused:true,onReverseComplete:()=>m.style.visibility='hidden'});
+tl.set(m,{visibility:'visible'}).to(m,{clipPath:'circle(150% at calc(100% - 60px) 40px)',duration:.9,ease:'power3.inOut'})
+.from('.menu a span',{yPercent:110,stagger:.07,duration:.7,ease:'power3.out'},'-=.4');
+$('open').onclick=()=>tl.timeScale(1).play();$('close').onclick=()=>tl.timeScale(1.4).reverse();
+document.addEventListener('keydown',e=>{if(e.key==='Escape')tl.reverse()});
+if(TX){document.documentElement.lang=LG;document.documentElement.dir=LG==='ar'?'rtl':'ltr';$('open').textContent=T.menu;$('close').textContent=T.close;document.querySelector('.hint span').textContent=T.scroll;$('pill').textContent=T.pill;document.querySelector('.note').textContent=T.note;
+document.querySelector('#ring textPath').textContent=T.ring.repeat(2);document.querySelectorAll('.menu a span').forEach((el,i)=>el.textContent=T.nav[i]);
+text();}
+// ---- Live data. Published products replace the provisional bottles; the "home" CMS page drives ring text, note and button.
+const COL=[0x23382b,0x2f4a35,0x1b2c22,0x2a4030],pk=v=>v&&(v[LG]||v.en||v.fr||v.ar)||'';
+const okHref=h=>/^(\/(?!\/)|https?:\/\/|mailto:|tel:)/i.test(h||'');
+function rebuild(list){B.forEach(g=>S.remove(g));cur=0;
+ P=list.slice(0,12).map((a,i)=>({slug:a.slug,live:true,n:pk(a.name)||a.slug,l:T.sub,r:T.made,ml:a.volumeMl?(a.volumeMl>=1000?(a.volumeMl/1000)+' L':a.volumeMl+' ml'):'',g:COL[i%COL.length],s:a.volumeMl?Math.min(1.25,Math.max(.75,.62+a.volumeMl/1300)):1,lab:(a.name.en||a.slug).toUpperCase().slice(0,22)}));
+ B=P.map(makeBottle);$('dots').innerHTML='';P.forEach(()=>$('dots').appendChild(document.createElement('i')));place(true);text();document.querySelector('.note').style.display='none'}
+fetch('/api/products').then(r=>r.ok?r.json():[]).then(l=>{if(l&&l.length)rebuild(l)}).catch(()=>{});
+fetch('/api/pages/home').then(r=>r.ok?r.json():null).then(pg=>{if(!pg)return;
+ const hero=pg.sections.find(x=>x.kind==='hero'),cta=(hero&&okHref(hero.content.buttonLink)&&pk(hero.content.buttonLabel))?hero:pg.sections.find(x=>x.kind==='cta'&&okHref(x.content.buttonLink)&&pk(x.content.buttonLabel));
+ if(hero){const h=pk(hero.content.heading);if(h)document.querySelector('#ring textPath').textContent=(h.toUpperCase()+' · ').repeat(Math.max(2,Math.ceil(110/(h.length+3))));
+  const b=pk(hero.content.body);if(b){const n=document.querySelector('.note');n.textContent=b;n.style.display='block'}}
+ if(cta){const a=$('cta');a.textContent=pk(cta.content.buttonLabel);a.href=cta.content.buttonLink;a.target='_top';a.hidden=false}}).catch(()=>{});
+let fr=false;
+text();place(true);
+</script></body></html>

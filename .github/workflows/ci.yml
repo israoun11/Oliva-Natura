@@ -1,0 +1,28 @@
+name: ci
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env: { POSTGRES_USER: oliva, POSTGRES_PASSWORD: oliva, POSTGRES_DB: oliva }
+        ports: ["5432:5432"]
+        options: --health-cmd "pg_isready -U oliva" --health-interval 5s --health-retries 10
+    env:
+      DATABASE_URL: "postgresql://oliva:oliva@localhost:5432/oliva?schema=public"
+      JWT_SECRET: "ci-only-secret-ci-only-secret-ci-only"
+      RUN_INTEGRATION: "1"
+      API_URL: "http://localhost:4000"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20, cache: npm }
+      - run: npm install
+      - run: npm run db:generate
+      - run: npm run db:push
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm test
+      - run: npm -w apps/api run build
+      - run: npm -w apps/storefront run build

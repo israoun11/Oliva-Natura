@@ -1,0 +1,21 @@
+{
+ "name": "oliva-natura",
+ "private": true,
+ "workspaces": [
+  "apps/*"
+ ],
+ "scripts": {
+  "dev:api": "npm -w apps/api run dev",
+  "dev:store": "npm -w apps/storefront run dev",
+  "test": "npm -w apps/api test",
+  "db:migrate": "npm -w apps/api run db:init",
+  "db:seed": "npm -w apps/api run db:seed",
+  "db:init": "npm -w apps/api run db:init",
+  "db:push": "npm -w apps/api run db:push",
+  "db:generate": "npm -w apps/api run db:generate",
+  "typecheck": "npm -w apps/api run typecheck && npm -w apps/storefront run typecheck",
+  "lint": "npm -w apps/storefront run lint",
+  "build": "npm -w apps/api run build && npm -w apps/storefront run build",
+  "check:homepage": "node scripts/homepage-smoke.js"
+ }
+}

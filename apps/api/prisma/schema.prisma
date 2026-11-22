@@ -1,0 +1,342 @@
+generator client {
+  provider = "prisma-client-js"
+}
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  SUPER_ADMIN
+  STORE_MANAGER
+  CONTENT_EDITOR
+  ORDER_MANAGER
+}
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+  REFUNDED
+}
+enum PaymentStatus {
+  UNPAID
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+}
+enum PaymentMethod {
+  COD
+  CARD_INTL
+  LOCAL_TN
+  WHATSAPP
+}
+enum ShipmentStatus {
+  NOT_SHIPPED
+  PREPARING
+  IN_TRANSIT
+  DELIVERED
+  RETURNED
+}
+
+model AdminUser {
+  id String @id @default(cuid())
+  email String @unique
+  passwordHash String
+  name String
+  role Role @default(CONTENT_EDITOR)
+  active Boolean @default(true)
+  createdAt DateTime @default(now())
+  auditLogs AuditLog[]
+}
+model Customer {
+  id String @id @default(cuid())
+  email String @unique
+  passwordHash String?
+  name String
+  phone String?
+  locale String @default("en")
+  createdAt DateTime @default(now())
+  addresses Address[]
+  orders Order[]
+  wishlist WishlistItem[]
+}
+model Address {
+  id String @id @default(cuid())
+  customerId String
+  customer Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  name String?
+  phone String?
+  isDefault Boolean @default(false)
+  line1 String
+  line2 String?
+  city String
+  region String?
+  postalCode String?
+  country String // ISO-3166 alpha-2
+  @@index([customerId])
+}
+model Category {
+  id String @id @default(cuid())
+  slug String @unique
+  name Json
+  sort Int @default(0)
+  products Product[]
+}
+model Collection {
+  imageUrl String?
+  id String @id @default(cuid())
+  slug String @unique
+  name Json
+  description Json?
+  sort Int @default(0)
+  published Boolean @default(true)
+  products Product[]
+}
+model Product {
+  id String @id @default(cuid())
+  slug String @unique
+  sku String @unique
+  name Json            // {"en": "...", "fr": "..."}
+  description Json
+  specs Json?          // ONLY verified specifications, edited in admin
+  volumeMl Int?
+  priceTnd Int         // millimes (1 TND = 1000)
+  priceEur Int?        // cents
+  salePriceTnd Int?
+  salePriceEur Int?
+  shippingEligible Boolean @default(true)
+  stock Int @default(0)
+  lowStockAt Int @default(5)
+  published Boolean @default(false)
+  seo Json?
+  categoryId String?
+  category Category? @relation(fields: [categoryId], references: [id])
+  collectionId String?
+  collection Collection? @relation(fields: [collectionId], references: [id])
+  images ProductImage[]
+  models ProductModel[]
+  variants ProductVariant[]
+  batches ProductBatch[]
+  movements InventoryMovement[]
+  orderItems OrderItem[]
+  wishlist WishlistItem[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@index([published, collectionId])
+}
+model ProductImage {
+  id String @id @default(cuid())
+  productId String
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  mediaId String?
+  media MediaAsset? @relation(fields: [mediaId], references: [id], onDelete: SetNull)
+  url String
+  alt Json?
+  sort Int @default(0)
+  @@index([productId])
+}
+model ProductModel {
+  id String @id @default(cuid())
+  productId String
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  glbUrl String
+  @@index([productId])
+}
+model ProductVariant {
+  id String @id @default(cuid())
+  productId String
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  label Json
+  priceTnd Int?
+  stock Int @default(0)
+  @@index([productId])
+}
+model InventoryMovement {
+  id String @id @default(cuid())
+  productId String
+  product Product @relation(fields: [productId], references: [id])
+  variantId String?
+  delta Int
+  reason String   // ORDER, ADJUSTMENT, RESTOCK, CANCEL
+  ref String?
+  adminId String?
+  createdAt DateTime @default(now())
+  @@index([productId, createdAt])
+}
+model Supplier {
+  id String @id @default(cuid())
+  name String
+  contact String?
+  region String?
+  notes String?
+  batches ProductBatch[]
+}
+model ProductBatch {
+  id String @id @default(cuid())
+  productId String
+  product Product @relation(fields: [productId], references: [id])
+  supplierId String?
+  supplier Supplier? @relation(fields: [supplierId], references: [id])
+  batchNumber String @unique
+  producer String?
+  origin String?
+  region String?
+  harvestDate DateTime?
+  packagingDate DateTime?
+  quantity Int?
+  documents Json?     // lab analyses, supporting docs (media URLs)
+  verified Boolean @default(false)  // public display only when true
+  @@index([productId])
+}
+model Order {
+  id String @id @default(cuid())
+  number String @unique
+  idempotencyKey String @unique
+  customerId String?
+  customer Customer? @relation(fields: [customerId], references: [id])
+  email String
+  phone String?
+  shippingAddress Json
+  country String
+  currency String
+  subtotal Int
+  shippingFee Int
+  total Int
+  status OrderStatus @default(PENDING)
+  paymentMethod PaymentMethod
+  paymentStatus PaymentStatus @default(UNPAID)
+  notes String?
+  internalNotes String?
+  items OrderItem[]
+  payments Payment[]
+  shipments Shipment[]
+  createdAt DateTime @default(now())
+  @@index([status, createdAt])
+  @@index([customerId])
+}
+model OrderItem {
+  id String @id @default(cuid())
+  orderId String
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId String
+  product Product @relation(fields: [productId], references: [id])
+  variantId String?
+  nameSnapshot String
+  unitPrice Int
+  quantity Int
+  @@index([orderId])
+}
+model Payment {
+  id String @id @default(cuid())
+  orderId String
+  order Order @relation(fields: [orderId], references: [id])
+  provider String
+  providerRef String? @unique
+  status PaymentStatus
+  amount Int
+  currency String
+  raw Json?
+  createdAt DateTime @default(now())
+}
+model Shipment {
+  id String @id @default(cuid())
+  orderId String
+  order Order @relation(fields: [orderId], references: [id])
+  carrier String?
+  trackingNumber String?
+  status ShipmentStatus @default(NOT_SHIPPED)
+  updatedAt DateTime @updatedAt
+}
+model Coupon {
+  id String @id @default(cuid())
+  code String @unique
+  percentOff Int?
+  amountOff Int?
+  active Boolean @default(true)
+  expiresAt DateTime?
+}
+model WishlistItem {
+  customerId String
+  customer Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  productId String
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  @@id([customerId, productId])
+}
+model Page {
+  id String @id @default(cuid())
+  slug String @unique
+  title Json
+  seo Json?
+  published Boolean @default(false)
+  sections PageSection[]
+}
+model PageSection {
+  id String @id @default(cuid())
+  pageId String
+  page Page @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  kind String
+  content Json
+  sort Int @default(0)
+  visible Boolean @default(true)
+  @@index([pageId, sort])
+}
+model Article {
+  id String @id @default(cuid())
+  slug String @unique
+  title Json
+  excerpt Json?
+  body Json
+  category String?
+  coverUrl String?
+  seo Json?
+  published Boolean @default(false)
+  publishedAt DateTime?
+}
+model MediaAsset {
+  id String @id @default(cuid())
+  publicId String @unique
+  url String
+  kind String @default("image")
+  folder String @default("general")
+  width Int?
+  height Int?
+  bytes Int?
+  mime String?
+  alt Json?
+  uploadedById String?
+  createdAt DateTime @default(now())
+  productImages ProductImage[]
+}
+model NewsletterSubscriber {
+  id String @id @default(cuid())
+  email String @unique
+  locale String @default("en")
+  createdAt DateTime @default(now())
+}
+model ContactMessage {
+  id String @id @default(cuid())
+  name String
+  email String
+  message String
+  read Boolean @default(false)
+  createdAt DateTime @default(now())
+}
+model SiteSetting {
+  key String @id
+  value Json
+}
+model AuditLog {
+  id String @id @default(cuid())
+  adminId String?
+  admin AdminUser? @relation(fields: [adminId], references: [id])
+  action String
+  entity String
+  entityId String?
+  meta Json?
+  createdAt DateTime @default(now())
+  @@index([createdAt])
+}

@@ -1,0 +1,23 @@
+# Dev database only:            docker compose up -d db
+# Full stack (build + run all): docker compose --profile full up --build
+services:
+  db:
+    image: postgres:16
+    environment: { POSTGRES_USER: oliva, POSTGRES_PASSWORD: oliva, POSTGRES_DB: oliva }
+    ports: ["5432:5432"]
+    volumes: [pgdata:/var/lib/postgresql/data]
+    healthcheck: { test: ["CMD-SHELL", "pg_isready -U oliva"], interval: 5s, retries: 10 }
+  api:
+    profiles: [full]
+    build: ./apps/api
+    env_file: ./apps/api/.env
+    environment: { DATABASE_URL: "postgresql://oliva:oliva@db:5432/oliva?schema=public", CORS_ORIGIN: "http://localhost:3000", NODE_ENV: "development" }
+    depends_on: { db: { condition: service_healthy } }
+    ports: ["4000:4000"]
+  storefront:
+    profiles: [full]
+    build: { context: ./apps/storefront, args: { API_URL: "http://api:4000" } }
+    environment: { API_URL: "http://api:4000", SITE_URL: "http://localhost:3000" }
+    depends_on: [api]
+    ports: ["3000:3000"]
+volumes: { pgdata: {} }

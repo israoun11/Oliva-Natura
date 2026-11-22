@@ -1,0 +1,43 @@
+export const LANGS = ["en", "fr", "ar"] as const;
+export type Lang = (typeof LANGS)[number];
+export const isRtl = (l: string) => l === "ar";
+const D: Record<string, Record<Lang, string>> = {
+  collections: { en: "Collections", fr: "Collections", ar: "المجموعات" }, story: { en: "Our Story", fr: "Notre Histoire", ar: "قصتنا" },
+  land: { en: "From Our Land", fr: "De Notre Terre", ar: "من أرضنا" }, philosophy: { en: "Philosophy", fr: "Philosophie", ar: "فلسفتنا" },
+  journal: { en: "Journal", fr: "Journal", ar: "المدونة" }, contact: { en: "Contact", fr: "Contact", ar: "اتصل بنا" }, cart: { en: "Cart", fr: "Panier", ar: "السلة" },
+  account: { en: "Account", fr: "Compte", ar: "حسابي" }, wishlist: { en: "Wishlist", fr: "Favoris", ar: "المفضلة" }, all: { en: "All", fr: "Tout", ar: "الكل" },
+  sort: { en: "Sort", fr: "Trier", ar: "ترتيب" }, priceAsc: { en: "Price ↑", fr: "Prix ↑", ar: "السعر ↑" }, priceDesc: { en: "Price ↓", fr: "Prix ↓", ar: "السعر ↓" },
+  inStock: { en: "In stock", fr: "En stock", ar: "متوفر" }, outOfStock: { en: "Out of stock", fr: "Épuisé", ar: "غير متوفر" }, lowStock: { en: "Only a few left", fr: "Dernières pièces", ar: "كمية محدودة" },
+  noProducts: { en: "No products are available yet.", fr: "Aucun produit disponible pour le moment.", ar: "لا توجد منتجات متاحة حاليا." },
+  addToCart: { en: "Add to cart", fr: "Ajouter au panier", ar: "أضف إلى السلة" }, whatsapp: { en: "Order via WhatsApp", fr: "Commander via WhatsApp", ar: "اطلب عبر واتساب" },
+  added: { en: "Added to cart", fr: "Ajouté au panier", ar: "تمت الإضافة إلى السلة" }, quantity: { en: "Quantity", fr: "Quantité", ar: "الكمية" }, variant: { en: "Option", fr: "Option", ar: "الخيار" },
+  related: { en: "You may also like", fr: "Vous aimerez aussi", ar: "قد يعجبك أيضا" }, view3d: { en: "3D view", fr: "Vue 3D", ar: "عرض ثلاثي الأبعاد" }, photos: { en: "Photos", fr: "Photos", ar: "الصور" },
+  verifiedBatch: { en: "Verified batch", fr: "Lot vérifié", ar: "دفعة موثقة" }, shippingInfo: { en: "Shipping is calculated at checkout from the delivery country.", fr: "La livraison est calculée à la commande selon le pays.", ar: "يتم احتساب الشحن عند الدفع حسب بلد التوصيل." },
+  emptyCart: { en: "Your cart is empty.", fr: "Votre panier est vide.", ar: "سلتك فارغة." }, subtotal: { en: "Subtotal", fr: "Sous-total", ar: "المجموع الفرعي" }, remove: { en: "Remove", fr: "Retirer", ar: "إزالة" },
+  checkout: { en: "Checkout", fr: "Commander", ar: "إتمام الطلب" }, shippingCalc: { en: "(shipping calculated at checkout)", fr: "(livraison calculée à la commande)", ar: "(الشحن يُحتسب عند الدفع)" },
+  fullName: { en: "Full name", fr: "Nom complet", ar: "الاسم الكامل" }, email: { en: "Email", fr: "E-mail", ar: "البريد الإلكتروني" }, phone: { en: "Phone", fr: "Téléphone", ar: "الهاتف" },
+  address: { en: "Address", fr: "Adresse", ar: "العنوان" }, city: { en: "City", fr: "Ville", ar: "المدينة" }, postal: { en: "Postal code", fr: "Code postal", ar: "الرمز البريدي" }, country: { en: "Country", fr: "Pays", ar: "البلد" },
+  codNote: { en: "Payment: cash on delivery (Tunisia only). Shipping is added by the server.", fr: "Paiement : à la livraison (Tunisie uniquement). La livraison est ajoutée par le serveur.", ar: "الدفع: عند الاستلام (تونس فقط). يُضاف الشحن من الخادم." },
+  placeOrder: { en: "Place order", fr: "Confirmer la commande", ar: "تأكيد الطلب" }, thanks: { en: "Thank you", fr: "Merci", ar: "شكرا لك" }, order: { en: "Order", fr: "Commande", ar: "الطلب" },
+  total: { en: "Total", fr: "Total", ar: "الإجمالي" }, status: { en: "Status", fr: "Statut", ar: "الحالة" }, payment: { en: "Payment", fr: "Paiement", ar: "الدفع" },
+  login: { en: "Sign in", fr: "Connexion", ar: "تسجيل الدخول" }, register: { en: "Create account", fr: "Créer un compte", ar: "إنشاء حساب" }, logout: { en: "Sign out", fr: "Déconnexion", ar: "تسجيل الخروج" },
+  password: { en: "Password", fr: "Mot de passe", ar: "كلمة المرور" }, name: { en: "Name", fr: "Nom", ar: "الاسم" }, profile: { en: "Profile", fr: "Profil", ar: "الملف الشخصي" },
+  addresses: { en: "Addresses", fr: "Adresses", ar: "العناوين" }, orders: { en: "Orders", fr: "Commandes", ar: "الطلبات" }, save: { en: "Save", fr: "Enregistrer", ar: "حفظ" }, delete: { en: "Delete", fr: "Supprimer", ar: "حذف" },
+  makeDefault: { en: "Default address", fr: "Adresse par défaut", ar: "العنوان الافتراضي" }, noOrders: { en: "No orders yet.", fr: "Aucune commande.", ar: "لا توجد طلبات." }, nothingSaved: { en: "Nothing saved yet.", fr: "Rien d'enregistré.", ar: "لا يوجد شيء محفوظ." },
+  send: { en: "Send", fr: "Envoyer", ar: "إرسال" }, message: { en: "Message", fr: "Message", ar: "الرسالة" }, sent: { en: "Message sent.", fr: "Message envoyé.", ar: "تم إرسال الرسالة." },
+  notFound: { en: "Not found", fr: "Introuvable", ar: "غير موجود" }, notPublished: { en: "This content is not published yet.", fr: "Ce contenu n'est pas encore publié.", ar: "لم يتم نشر هذا المحتوى بعد." },
+  noArticles: { en: "No articles published yet.", fr: "Aucun article publié.", ar: "لا توجد مقالات منشورة." }, newsletter: { en: "Newsletter", fr: "Newsletter", ar: "النشرة البريدية" }, subscribe: { en: "Subscribe", fr: "S'abonner", ar: "اشترك" },
+  legal: { en: "Legal", fr: "Mentions légales", ar: "قانوني" }, privacy: { en: "Privacy Policy", fr: "Confidentialité", ar: "الخصوصية" }, terms: { en: "Terms", fr: "Conditions", ar: "الشروط" },
+  shipping: { en: "Shipping", fr: "Livraison", ar: "الشحن" }, returns: { en: "Returns", fr: "Retours", ar: "الإرجاع" }, cookies: { en: "Cookies", fr: "Cookies", ar: "ملفات الارتباط" },
+  loginRequired: { en: "Please sign in to continue.", fr: "Veuillez vous connecter.", ar: "الرجاء تسجيل الدخول للمتابعة." }, from: { en: "Sale", fr: "Promo", ar: "تخفيض" },
+  address2: { en: "Address line 2", fr: "Complément d'adresse", ar: "عنوان إضافي" }, region: { en: "Region", fr: "Région", ar: "المنطقة" }, language: { en: "Language", fr: "Langue", ar: "اللغة" },
+  unavailable: { en: "Checkout is temporarily unavailable.", fr: "La commande est temporairement indisponible.", ar: "إتمام الطلب غير متاح مؤقتا." },
+  currentPassword: { en: "Current password", fr: "Mot de passe actuel", ar: "كلمة المرور الحالية" }, newPassword: { en: "New password (min 8 characters)", fr: "Nouveau mot de passe (8 caractères min.)", ar: "كلمة مرور جديدة (8 أحرف على الأقل)" },
+  changePassword: { en: "Change password", fr: "Changer le mot de passe", ar: "تغيير كلمة المرور" }, saved: { en: "Saved", fr: "Enregistré", ar: "تم الحفظ" }, tracking: { en: "Tracking", fr: "Suivi", ar: "التتبع" },
+  s_PENDING: { en: "Pending", fr: "En attente", ar: "قيد الانتظار" }, s_CONFIRMED: { en: "Confirmed", fr: "Confirmée", ar: "مؤكد" }, s_PROCESSING: { en: "Processing", fr: "En préparation", ar: "قيد التجهيز" },
+  s_SHIPPED: { en: "Shipped", fr: "Expédiée", ar: "تم الشحن" }, s_DELIVERED: { en: "Delivered", fr: "Livrée", ar: "تم التسليم" }, s_CANCELLED: { en: "Cancelled", fr: "Annulée", ar: "ملغى" }, s_REFUNDED: { en: "Refunded", fr: "Remboursée", ar: "مسترد" },
+  p_UNPAID: { en: "Unpaid", fr: "Non payée", ar: "غير مدفوع" }, p_PENDING: { en: "Pending", fr: "En attente", ar: "قيد الانتظار" }, p_PAID: { en: "Paid", fr: "Payée", ar: "مدفوع" }, p_FAILED: { en: "Failed", fr: "Échec", ar: "فشل" }, p_REFUNDED: { en: "Refunded", fr: "Remboursée", ar: "مسترد" },
+  m_COD: { en: "Cash on delivery", fr: "Paiement à la livraison", ar: "الدفع عند الاستلام" }, orderPlaced: { en: "We received your order and will contact you to confirm delivery.", fr: "Nous avons reçu votre commande et vous contacterons pour confirmer la livraison.", ar: "استلمنا طلبك وسنتواصل معك لتأكيد التوصيل." },
+};
+export const tr = (k: string, l: Lang) => D[k]?.[l] ?? D[k]?.en ?? k;
+export const pick = (v: any, l: Lang) => (v && (v[l] || v.en)) || "";
